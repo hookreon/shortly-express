@@ -39,6 +39,10 @@ function(req, res) {
   res.render('login');
 });
 
+app.get('/logout', util.endSession, function(req, res) {
+  res.render('/login');
+});
+
 app.get('/signup',
 function(req, res) {
   res.render('signup');
@@ -88,14 +92,10 @@ function(req, res) {
   });
 });
 
-/************************************************************/
-// Write your authentication routes here
-/************************************************************/
 app.post('/login', function(req, res) {
   var username = req.body.username;
   var password = req.body.password;
 
-  //user name present?
   new User({username: username}).fetch().then(function(user) {
     if (!user) {
       return res.redirect('/login');
@@ -114,7 +114,6 @@ app.post('/signup', function(req, res) {
   var username = req.body.username;
   var password = req.body.password;
 
-
   new User({ username: username })
     .fetch()
     .then(function(user) {
@@ -124,13 +123,17 @@ app.post('/signup', function(req, res) {
           username: username,
           password: hash
         }).then(function(user) {
-            util.createSession(req, res, user);
+             util.createSession(req, res, user);
         });
       });
     } else {
       res.redirect('/login');
     }
   });
+});
+
+app.post('/logout', util.endSession, function(req, res) {
+  res.render('/login');
 });
 
 /************************************************************/
