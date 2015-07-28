@@ -4,23 +4,23 @@ var Promise = require('bluebird');
 var util = require('../../lib/utility.js')
 
 var User = db.Model.extend({
-  initialize: function(username, password) {
-    this.username = username;
+  initialize: function() {
+    this.on('creating', this.hashPassword);
     // this.password = this.hashPassword(password);
-  }
-
+  },
+  tableName: 'users'
 });
 
+//use promises here
 User.prototype.hashPassword = function(password){
-  bcrypt.genSalt(10, function(err, salt) {
-   bcrypt.hash(password, salt, function(err, hash) {
-     //add to database
-
-   });
+  //this.set
+  return bcrypt.genSaltAsync(10).then(function(salt) {
+    return bcrypt.hashAsync(data.password, result, null)
   });
  };
 
 User.prototype.comparePassword = function(pw) {
+  // this.get
   bcrypt.compare(pw, hash, function(err, res) {
     if(res) {
        //login
@@ -30,14 +30,14 @@ User.prototype.comparePassword = function(pw) {
   });
 };
 
-//table name - put users into
-User.prototype.insertUser = function(user) {
-  if (!util.checkUser(user)) {
-    console.log('inside insertuser');
-    db.knex('users').insert({username: this.username, password: this.hashedPassword});
-  } else {
-    //redirect
-  }
-};
+// //table name - put users into
+// User.prototype.insertUser = function(user) {
+//   if (!util.checkUser(user)) {
+//     console.log('inside insertuser');
+//     // db.knex('users').insert({username: this.username, password: this.hashedPassword});
+//   } else {
+//     //redirect
+//   }
+// };
 
 module.exports = User;

@@ -116,29 +116,20 @@ app.post('/signup', function(req, res) {
 
   new User({ username: username }).fetch().then(function(found) {
     if (found) {
-      res.send(200, found.attributes);
+      res.redirect('/login');
     } else {
-      // util.getUrlTitle(uri, function(err, title) {
-      //   if (err) {
-      //     console.log('Error reading URL heading: ', err);
-      //     return res.send(404);
-      //   }
-
+      console.log('adding a user!!!');
         var user = new User({
           username: username,
           password: password
         });
-
         user.save().then(function(newUser) {
+          //create & start session!!!!
           Users.add(newUser);
-          res.send(200, newUser);
         });
-      //});
     }
   });
 });
-
-
 
 /************************************************************/
 // Handle the wildcard route last - if all other routes fail
