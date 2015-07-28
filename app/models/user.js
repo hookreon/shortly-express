@@ -11,31 +11,22 @@ var User = db.Model.extend({
   tableName: 'users'
 }, {
   hashPassword: function(password){
-    //this.set
-    return bcrypt.genSaltAsync(10).then(function(salt) {
-      return bcrypt.hashAsync(data.password, result, null)
+    console.log('inside hash password');
+    bcrypt.hash(password, null, null, function() {
+      //whats here???
     });
   },
   comparePassword: function(pw) {
-    // this.get
     bcrypt.compare(pw, hash, function(err, res) {
       if(res) {
-         //login
+         //this.get password and compare
       } else {
-         //redirect
+         //redirect to login
       }
     });
   }
 });
 
-// //table name - put users into
-// User.prototype.insertUser = function(user) {
-//   if (!util.checkUser(user)) {
-//     console.log('inside insertuser');
-//     // db.knex('users').insert({username: this.username, password: this.hashedPassword});
-//   } else {
-//     //redirect
-//   }
-// };
+
 
 module.exports = User;
