@@ -119,11 +119,10 @@ app.post('/signup', function(req, res) {
       res.redirect('/login');
     } else {
       console.log('adding a user!!!');
-        var user = new User({
+        new User({
           username: username,
           password: password
-        });
-        user.save().then(function(newUser) {
+        }).save().then(function(newUser) {
           //create & start session!!!!
           Users.add(newUser);
         });

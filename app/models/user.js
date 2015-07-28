@@ -9,26 +9,24 @@ var User = db.Model.extend({
     // this.password = this.hashPassword(password);
   },
   tableName: 'users'
+}, {
+  hashPassword: function(password){
+    //this.set
+    return bcrypt.genSaltAsync(10).then(function(salt) {
+      return bcrypt.hashAsync(data.password, result, null)
+    });
+  },
+  comparePassword: function(pw) {
+    // this.get
+    bcrypt.compare(pw, hash, function(err, res) {
+      if(res) {
+         //login
+      } else {
+         //redirect
+      }
+    });
+  }
 });
-
-//use promises here
-User.prototype.hashPassword = function(password){
-  //this.set
-  return bcrypt.genSaltAsync(10).then(function(salt) {
-    return bcrypt.hashAsync(data.password, result, null)
-  });
- };
-
-User.prototype.comparePassword = function(pw) {
-  // this.get
-  bcrypt.compare(pw, hash, function(err, res) {
-    if(res) {
-       //login
-    } else {
-       //redirect
-    }
-  });
-};
 
 // //table name - put users into
 // User.prototype.insertUser = function(user) {
