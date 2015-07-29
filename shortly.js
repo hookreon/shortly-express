@@ -99,15 +99,16 @@ app.post('/login', function(req, res) {
   new User({username: username}).fetch().then(function(user) {
     if (!user) {
       return res.redirect('/login');
+    } else {
+      user.comparePassword(password, function(match) {
+        if (match) {
+          util.createSession(req, res, user);
+        } else {
+          res.redirect('/login');
+        }
+      });
     }
-    bcrypt.compare(password, user.get('password'), function(err, match) {
-      if (match) {
-        util.createSession(req, res, user);
-      } else {
-        res.redirect('/login');
-      }
-    })
-  })
+  });
 });
 
 app.post('/signup', function(req, res) {
@@ -118,16 +119,17 @@ app.post('/signup', function(req, res) {
     .fetch()
     .then(function(user) {
     if (!user) {
-      bcrypt.hash(password, null, null, function (err, hash) {
-        Users.create({
+      var newUser = new User({
           username: username,
-          password: hash
-        }).then(function(user) {
-             util.createSession(req, res, user);
+          password: password
         });
-      });
+        newUser.save()
+          .then(function(newUser) {
+             util.createSession(req, res, newUser);
+             Users.add(newUser);
+        });
     } else {
-      res.redirect('/login');
+      res.redirect('/signup');
     }
   });
 });
